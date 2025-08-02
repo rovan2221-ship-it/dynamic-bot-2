@@ -26,7 +26,11 @@ class SeenBot(irc.bot.SingleServerIRCBot):
         print("Bot startuje...")
         server = 'irc.chat.twitch.tv'
         port = 6697
-        factory = irc.connection.Factory(wrapper=ssl.wrap_socket)
+
+        # Tworzymy SSLContext zamiast ssl.wrap_socket
+        context = ssl.create_default_context()
+        factory = irc.connection.Factory(wrapper=context.wrap_socket)
+
         super().__init__([(server, port, TOKEN)], USERNAME, USERNAME, connect_factory=factory)
 
         self.channel = CHANNEL
@@ -77,5 +81,4 @@ if __name__ == "__main__":
     keep_alive()
     threading.Thread(target=auto_ping, daemon=True).start()
     bot = SeenBot()
-
     bot.start()
