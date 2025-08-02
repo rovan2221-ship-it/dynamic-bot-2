@@ -9,7 +9,7 @@ from keep_alive import keep_alive
 
 CHANNEL = "#intekk"
 USERNAME = "botdynamic57"
-TOKEN = "oauth:qanhc55ylxwiqd5uvnrxnvwejl7klq"
+TOKEN = "oauth:hra4zm2yrrkvophppwziermazvofew"
 tracked_user = "dynamic57__"
 
 def auto_ping():
@@ -77,4 +77,5 @@ if __name__ == "__main__":
     keep_alive()
     threading.Thread(target=auto_ping, daemon=True).start()
     bot = SeenBot()
+
     bot.start()
