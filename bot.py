@@ -27,9 +27,8 @@ class SeenBot(irc.bot.SingleServerIRCBot):
         server = 'irc.chat.twitch.tv'
         port = 6697
 
-        # Tworzymy SSLContext zamiast ssl.wrap_socket
         context = ssl.create_default_context()
-        factory = irc.connection.Factory(wrapper=context.wrap_socket)
+        factory = irc.connection.Factory(wrapper=lambda sock: context.wrap_socket(sock, server_hostname=server))
 
         super().__init__([(server, port, TOKEN)], USERNAME, USERNAME, connect_factory=factory)
 
@@ -38,47 +37,4 @@ class SeenBot(irc.bot.SingleServerIRCBot):
 
     def on_welcome(self, connection, event):
         print("✅ Połączono! Dołączam do kanału...")
-        connection.join(self.channel)
-
-    def on_join(self, connection, event):
-        print(f"✅ Dołączyłem do kanału {self.channel}")
-
-    def on_pubmsg(self, connection, event):
-        user = event.source.nick.lower()
-        message = event.arguments[0]
-        print(f"💬 Wiadomość od {user}: {message}")
-
-        if user == tracked_user.lower():
-            self.last_seen = datetime.datetime.now()
-            print(f"🕒 Zaktualizowano last_seen dla {tracked_user}")
-
-        if message.lower().startswith("!dynamic"):
-            if self.last_seen is None:
-                response = "Dynamica jeszcze tu dzisiaj nie było."
-            else:
-                now = datetime.datetime.now()
-                diff = now - self.last_seen
-
-                days = diff.days
-                hours, remainder = divmod(diff.seconds, 3600)
-                minutes, seconds = divmod(remainder, 60)
-
-                parts = []
-                if days > 0: parts.append(f"{days} dni")
-                if hours > 0: parts.append(f"{hours} godzin")
-                if minutes > 0: parts.append(f"{minutes} minut")
-                if seconds > 0: parts.append(f"{seconds} sekund")
-                if not parts: parts.append("0 sekund")
-
-                diff_str = ", ".join(parts)
-                timestamp = self.last_seen.strftime("(%Y-%m-%d %H:%M:%S)")
-                response = f"Dynamic był tu ostatnio {diff_str} temu {timestamp}."
-
-            print(f"📤 Wysyłam: {response}")
-            connection.privmsg(self.channel, response)
-
-if __name__ == "__main__":
-    keep_alive()
-    threading.Thread(target=auto_ping, daemon=True).start()
-    bot = SeenBot()
-    bot.start()
+        connection.j
