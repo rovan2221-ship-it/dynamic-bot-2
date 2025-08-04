@@ -15,7 +15,7 @@ tracked_user = "dynamic57__"
 def auto_ping():
     while True:
         try:
-            requests.get("https://5046fac2-9a64-473f-abe5-2037467ea47d-00-2kk26y4sw6j6i.janeway.replit.dev/")
+            requests.get("https://dynamic-bot-2.onrender.com")
             print("🔁 Auto-ping wysłany!")
         except Exception as e:
             print(f"⚠️ Auto-ping error: {e}")
@@ -81,5 +81,6 @@ if __name__ == "__main__":
     threading.Thread(target=auto_ping, daemon=True).start()
     bot = SeenBot()
     bot.start()
+
 
 
