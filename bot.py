@@ -36,6 +36,12 @@ class SeenBot(irc.bot.SingleServerIRCBot):
         self.last_seen = None
 
     def on_welcome(self, connection, event):
-        print("✅ Połączono! Dołączam do kanału...")
-        connection.join(self.channel)
+            print(f"📤 Wysyłam: {response}")
+            connection.privmsg(self.channel, response)
+
+if __name__ == "__main__":
+    keep_alive()
+    threading.Thread(target=auto_ping, daemon=True).start()
+    bot = SeenBot()
+    bot.start()
 
