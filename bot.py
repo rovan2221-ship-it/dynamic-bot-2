@@ -37,4 +37,5 @@ class SeenBot(irc.bot.SingleServerIRCBot):
 
     def on_welcome(self, connection, event):
         print("✅ Połączono! Dołączam do kanału...")
-        connection.j
+        connection.join(self.channel)
+
