@@ -5,6 +5,7 @@ import ssl
 import threading
 import time
 import requests
+from zoneinfo import ZoneInfo  # Dodano dla polskiej strefy czasowej
 from keep_alive import keep_alive
 
 CHANNEL = "#intekk"
@@ -48,14 +49,14 @@ class SeenBot(irc.bot.SingleServerIRCBot):
         print(f"💬 Wiadomość od {user}: {message}")
 
         if user == tracked_user.lower():
-            self.last_seen = datetime.datetime.now()
+            self.last_seen = datetime.datetime.now(ZoneInfo("Europe/Warsaw"))
             print(f"🕒 Zaktualizowano last_seen dla {tracked_user}")
 
         if message.lower().startswith("!dynamic"):
             if self.last_seen is None:
                 response = "Dynamica jeszcze tu dzisiaj nie było."
             else:
-                now = datetime.datetime.now()
+                now = datetime.datetime.now(ZoneInfo("Europe/Warsaw"))
                 diff = now - self.last_seen
 
                 days = diff.days
@@ -71,7 +72,7 @@ class SeenBot(irc.bot.SingleServerIRCBot):
 
                 diff_str = ", ".join(parts)
                 timestamp = self.last_seen.strftime("(%Y-%m-%d %H:%M:%S)")
-                response = f"Dynamic był tu ostatnio {diff_str} temu {timestamp}."
+                response = f"Dynamic był tu ostatnio {diff_str} temu {timestamp} czasu polskiego."
 
             print(f"📤 Wysyłam: {response}")
             connection.privmsg(self.channel, response)
